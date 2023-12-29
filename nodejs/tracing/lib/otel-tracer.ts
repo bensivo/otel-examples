@@ -28,7 +28,6 @@ import { B3InjectEncoding, B3Propagator} from '@opentelemetry/propagator-b3';
  *       
  *       await tracer.flush(); // Make sure all spans are exported before exiting
  *   }
- * 
  */
 export class OtelTracer {
     sdk!: NodeSDK;

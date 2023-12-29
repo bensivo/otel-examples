@@ -20,13 +20,16 @@ This implementation should be:
 ## Implemented
 - Tracing
     - [x] Node.js
-    - [] Python
-    - [] Golang
+    - [ ] Python
+    - [ ] Golang
+    - [ ] Java
 - Logging
-    - [] Node.js
-    - [] Python
-    - [] Golang
+    - [ ] Node.js
+    - [ ] Python
+    - [ ] Golang
+    - [ ] Java
 - Metrics
-    - [] Node.js
-    - [] Python
-    - [] Golang
+    - [ ] Node.js
+    - [ ] Python
+    - [ ] Golang
+    - [ ] Java
