@@ -19,3 +19,10 @@ npx ts-node ./app/sender.ts
 ```
 
 Then go to http://localhost:16686 to see the traces in the jaeger ui.
+
+
+Basic demo:
+![Alt text](jaeger-basic.png)
+
+Sender-Receiver demo:
+![Alt text](jaeger-sender-receiver.png)
