@@ -20,7 +20,7 @@ This implementation should be:
 ## Implemented
 - Tracing
     - [x] Node.js
-    - [ ] Python
+    - [x] Python
     - [ ] Golang
     - [ ] Java
 - Logging
