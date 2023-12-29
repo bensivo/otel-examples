@@ -5,23 +5,6 @@ import json
 import time
 from lib.tracing import OtelTracer
 
-# provider = TracerProvider(
-#     resource = Resource.create({
-#         ResourceAttributes.SERVICE_NAME: 'python-tracing-demo-receiver',
-#         ResourceAttributes.SERVICE_VERSION: '0.0.0',
-#     })
-# )
-# processor = BatchSpanProcessor(OTLPSpanExporter(
-#     endpoint="http://localhost:4318/v1/traces",
-# ))
-# provider.add_span_processor(processor)
-
-# trace.set_tracer_provider(provider)
-# tracer = trace.get_tracer("basic")
-
-# propagate.set_global_textmap(B3SingleFormat())
-# PROPAGATOR = propagate.get_global_textmap()
-
 tracer = OtelTracer(service_name='python-tracing-demo-receiver', service_version='0.0.0')
 tracer.initialize()
 

@@ -7,7 +7,6 @@ from lib.tracing import OtelTracer
 tracer = OtelTracer(service_name='python-tracing-demo-sender', service_version='0.0.0')
 tracer.initialize()
 
-
 def main():
     """
     Example creating a parent and child span, and manually calling the "end" method when done.
