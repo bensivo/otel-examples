@@ -1,12 +1,11 @@
 import { Context } from "@opentelemetry/api";
 import { OtelTracer } from "../lib/otel-tracer";
 
-
 /**
  * Global tracer instance, so all function calls in this app can use this same object.
  * In a real application, something like a singleton implementation would be useful as a wrapper around this.
  */
-const tracer = new OtelTracer('nodejs-tracing-demo', '0.0.0');
+const tracer = new OtelTracer('nodejs-tracing-demo-basic', '0.0.0');
 tracer.initialize();
 
 async function main() {

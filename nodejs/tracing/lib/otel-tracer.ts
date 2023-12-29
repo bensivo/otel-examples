@@ -1,14 +1,34 @@
-import { Context, SpanOptions, trace, Tracer, Span, ROOT_CONTEXT } from '@opentelemetry/api';
+import { Context, SpanOptions, trace, Tracer, Span, ROOT_CONTEXT, propagation, defaultTextMapSetter, defaultTextMapGetter } from '@opentelemetry/api';
 import { ExportResult, ExportResultCode } from '@opentelemetry/core';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { ReadableSpan, Span as SDKSpan, SpanExporter, SpanProcessor, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-
+import { B3InjectEncoding, B3Propagator} from '@opentelemetry/propagator-b3';
 
 /**
  * Wrapper class for all Otel tracing functionality.
+ *  
+ * Usage:
+ *   const tracer = new OtelTracer('nodejs-tracing-demo-basic', '0.0.0');
+ *   tracer.initialize();
+ * 
+ *   async function main() {
+ *       const span = tracer.span('parent', {});
+ *       const ctx = tracer.context(span);
+ * 
+ *       const child1Span = tracer.span('child-1', {}, ctx)
+ *       child1Span.end()
+ *
+ *       const child2Span = tracer.span('child-2', {}, ctx)
+ *       child2Span.end()
+ * 
+ *       span.end();
+ *       
+ *       await tracer.flush(); // Make sure all spans are exported before exiting
+ *   }
+ * 
  */
 export class OtelTracer {
     sdk!: NodeSDK;
@@ -22,12 +42,10 @@ export class OtelTracer {
 
     initialize() {
         // Use these for debugging, learning how spans work
-        //
         // this.exporter = new DebugSpanExporter();
         // this.processor = new DebugSpanProcessor(this.exporter);
 
         // Use these for a real application
-        // 
         this.exporter = new OTLPTraceExporter({
             url: 'http://localhost:4318/v1/traces',
             headers: {},
@@ -47,26 +65,98 @@ export class OtelTracer {
             spanProcessor: this.processor,
         });
 
+        // Configure the default propagator. We use b3 in this lib for its simplicity.
+        propagation.setGlobalPropagator(new B3Propagator({
+            injectEncoding: B3InjectEncoding.SINGLE_HEADER
+        }));
+
         this.sdk.start();
+
     }
 
     get tracer(): Tracer {
         return trace.getTracer(this.serviceName, this.serviceVersion);
     }
 
+    /**
+     * Create a new span, using a parent context if given.
+     * 
+     * If the parent context is not given, the new span will be a root span.
+     *
+     * @param name 
+     * @param options 
+     * @param parentContext 
+     * @returns 
+     */
     span(name: string, options: SpanOptions, parentContext: Context = ROOT_CONTEXT): Span  {
         return this.tracer.startSpan(name, options, parentContext);
     }
 
+    /**
+     * Create a context object from a given span, for passing to subsequent otelTracer.span() calls,
+     * establishing a parent-child relationship between your spans.
+     * 
+     * If the parent context is not given, the new context will be for the root span.
+     *
+     * @param name 
+     * @param options 
+     * @param parentContext 
+     * @returns 
+     */
     context(span: Span, parentContext: Context = ROOT_CONTEXT): Context {
         return trace.setSpan(parentContext, span);
     }
 
+    /**
+     * Flush all pending spans to be processed and exported. Call before exiting your application.
+     */
     async flush(): Promise<void> {
         await this.processor.forceFlush();
         if (this.exporter.forceFlush) {
             await this.exporter.forceFlush();
         }
+    }
+
+    /**
+     * Serialize a span context into a b3 string representation.
+     * This b3 string can be sent to downstream services using any transport mechanism.
+     * 
+     * Downstream services can recreate the context from OtelTracer.fromB3(), then create child spans.
+     */
+    static toB3(context: Context): string  {
+        const carrier: any = {};
+
+        propagation.inject(context, carrier, defaultTextMapSetter);
+
+        console.log(JSON.stringify(carrier));
+        return carrier.b3;
+    }
+
+    /**
+     * Non-static overload ot OtelTracer.toB3(). For convenience.
+     */
+    toB3(context: Context): string {
+        return OtelTracer.toB3(context);
+    }
+
+    /**
+     * Deserialize a span context from a b3 string.
+     * Used for propagating parent-child span relationships across services.
+     */
+    static fromB3(b3: string): Context  {
+        const carrier = {
+            b3,
+        };
+
+        const context = propagation.extract(ROOT_CONTEXT, carrier, defaultTextMapGetter);
+        return context;
+    }
+
+    /**
+     * Non-static overload ot OtelTracer.fromB3(). For convenience.
+     */
+    fromB3(b3: string): Context {
+        return OtelTracer.fromB3(b3);
     }
 }
 
