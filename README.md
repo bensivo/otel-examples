@@ -2,7 +2,7 @@
 
 This repo is for my own personal experimentation and reference.
 
-I love the standardization and compatibility provided by open telemetry, but I dislike 2 things about it:
+I love the standardization and compatibility provided by open telemetry, but I dislike 3 things about it:
 - The OpenTelemetry APIs are incredibly complex, often overwhelming for simple use-cases
 - OpenTelemetry auto-instrumentation is very "magical", as opposed to explicit
 - OpenTelemetry auto-instrumentation often requires a separate dependency library for each application framework you use, increasing lock-in to that framework
