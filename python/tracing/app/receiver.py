@@ -18,8 +18,8 @@ def job():
     parent_context = tracer.from_b3(data['b3'])
 
     # Create child span from extracted context
-    # child_span = tracer.tracer.start_span("job", context=parent_context)
-    child_span = tracer.span(name="job", context=parent_context)
+    # child_span = tracer.tracer.start_span("job", parent_context=parent_context)
+    child_span = tracer.span(name="job", parent_context=parent_context)
 
     time.sleep(1)
 

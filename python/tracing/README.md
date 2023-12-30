@@ -18,6 +18,9 @@ python app/basic.py
 # Run in 2 terminals
 python app/receiver.py
 python app/sender.py
+
+# Run in 1 terminal, with mprocs
+mprocs 'python app/receiver.py' 'sleep 3 && python app/sender.py'
 ```
 
 Then go to http://localhost:16686 to see the traces in the jaeger ui.

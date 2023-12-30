@@ -11,10 +11,12 @@ class OtelTracer():
     def __init__(self, service_name, service_version):
         self.service_name = service_name
         self.service_version = service_version
+        self.propagator = None
     
     def initialize(self):
-        propagate.set_global_textmap(B3SingleFormat())
-        PROPAGATOR = propagate.get_global_textmap()
+        self.propagator = B3SingleFormat()
+        self.getter = DefaultGetter()
+        self.setter = DefaultSetter()
 
         provider = TracerProvider(
             resource = Resource.create({
@@ -33,34 +35,61 @@ class OtelTracer():
         self.exporter = exporter
         self.processor = processor
 
-    def tracer(self): 
+    def _tracer(self): 
         return trace.get_tracer("basic")
     
-    def span(self, name, context = None, **kwargs):
-        return self.tracer().start_span(name, context, *kwargs)
+    def span(self, name, parent_context = None, **kwargs):
+        """
+        Create a span, optionally providing a parent context to create a child span.
+        If no context is given, the span is a root span.
 
-    def context(self, span, context = None):
-        return trace.set_span_in_context(span, context)
+        Args:
+            name (str): Name of the span
+            context (Context): Parent context, created with otelTracer.context(parent_span)
+        
+        Returns:
+            A new span object.
+        """
+        return self._tracer().start_span(name, parent_context, **kwargs)
+
+    def context(self, span, parent_context = None):
+        """
+        Create a context object from a span, for creating of child spans from the parent
+        If no context is given, the context is copied from the root span (empty)
+
+        Args:
+            name (str): Name of the span
+            context (Context): Parent context, created with otelTracer.context(parent_span)
+        
+        Returns:
+            A new span object.
+        """
+        return trace.set_span_in_context(span, parent_context)
 
     def flush(self):
-        self.processor.force_flush(1000)
+        """
+        Export all pending spans now, instead of waiting for the next batch.
+        """
+        self.processor.force_flush()
         self.exporter.force_flush()
 
     def to_b3(self, context):
-        setter = DefaultSetter()
-        PROPAGATOR = propagate.get_global_textmap()
-
+        """
+        Serialize a context object into a single-value b3 string, for propagation
+        of contexts across service boundaries.
+        """
         carrier = {}
-        PROPAGATOR.inject(carrier, context=context, setter=setter)
+        self.propagator.inject(carrier, context=context, setter=self.setter)
         b3 = carrier['b3']
         return b3
 
     def from_b3(self, b3):
-        getter = DefaultGetter()
-        PROPAGATOR = propagate.get_global_textmap()
-
+        """
+        Deserialize a context object from a b3 string, for propagation
+        of contexts across service boundaries.
+        """
         carrier = {
             'b3': b3
         }
-        context = PROPAGATOR.extract(carrier, getter=getter)
+        context = self.propagator.extract(carrier, getter=self.getter)
         return context

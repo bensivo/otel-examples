@@ -14,31 +14,31 @@ def main():
     pipeline_context = tracer.context(pipeline_span)
 
     print('job-a')
-    job_a_span = tracer.span("job-a", context=pipeline_context)
+    job_a_span = tracer.span("job-a", parent_context=pipeline_context)
     time.sleep(1)
     job_a_span.end()
 
     print('job-b')
-    job_b_span = tracer.span("job-b", context=pipeline_context)
+    job_b_span = tracer.span("job-b", parent_context=pipeline_context)
     time.sleep(1)
     job_b_span.end()
 
     print('job-c')
-    job_c_span = tracer.span("job-c", context=pipeline_context)
+    job_c_span = tracer.span("job-c", parent_context=pipeline_context)
     job_c_context = tracer.context(job_c_span, pipeline_context)
 
     print('task')
-    task_span = tracer.span("task", context=job_c_context)
+    task_span = tracer.span("task", parent_context=job_c_context)
     time.sleep(1)
     task_span.end()
 
     print('task')
-    task_span = tracer.span("task", context=job_c_context)
+    task_span = tracer.span("task", parent_context=job_c_context)
     time.sleep(1)
     task_span.end()
 
     print('task')
-    task_span = tracer.span("task", context=job_c_context)
+    task_span = tracer.span("task", parent_context=job_c_context)
     time.sleep(1)
     task_span.end()
 

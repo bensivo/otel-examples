@@ -18,8 +18,11 @@ def main():
     # Serialize context into b3
     b3 = tracer.to_b3(context)
 
+    print('job')
     requests.post('http://127.0.0.1:5000/job', json = { 'b3': b3 })
+    print('job')
     requests.post('http://127.0.0.1:5000/job', json = { 'b3': b3 })
+    print('job')
     requests.post('http://127.0.0.1:5000/job', json = { 'b3': b3 })
 
     span.end()
