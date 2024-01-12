@@ -14,4 +14,15 @@ includes:
   python-tracer-demo-receiver:
     taskfile: ./packages/python-tracer-demo-receiver/Taskfile.yml
     dir: ./packages/python-tracer-demo-receiver/
-    
+  nodejs-tracer:
+    taskfile: ./packages/nodejs-tracer/Taskfile.yml
+    dir: ./packages/nodejs-tracer/
+  nodejs-tracer-demo-basic:
+    taskfile: ./packages/nodejs-tracer-demo-basic/Taskfile.yml
+    dir: ./packages/nodejs-tracer-demo-basic/
+  nodejs-tracer-demo-sender:
+    taskfile: ./packages/nodejs-tracer-demo-sender/Taskfile.yml
+    dir: ./packages/nodejs-tracer-demo-sender/
+  nodejs-tracer-demo-receiver:
+    taskfile: ./packages/nodejs-tracer-demo-receiver/Taskfile.yml
+    dir: ./packages/nodejs-tracer-demo-receiver/

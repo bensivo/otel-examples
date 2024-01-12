@@ -1,0 +1,13 @@
+version: '3'
+
+
+tasks:
+  install:
+    cmds: 
+      - npm i
+
+  run:
+    cmds:
+      - |
+        source ./venv/bin/activate
+        python basic.py

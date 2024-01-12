@@ -1,5 +1,5 @@
 import express from 'express';
-import { OtelTracer } from '../lib/otel-tracer';
+import { OtelTracer } from 'otel-tracer';
 
 
 const tracer = new OtelTracer('nodejs-tracing-demo-receiver', '0.0.0');

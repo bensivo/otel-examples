@@ -1,4 +1,4 @@
-import { OtelTracer } from "../lib/otel-tracer";
+import { OtelTracer } from "otel-tracer";
 import axios from 'axios';
 
 const tracer = new OtelTracer('nodejs-tracing-demo-sender', '0.0.0');

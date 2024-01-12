@@ -1,5 +1,5 @@
 import { Context } from "@opentelemetry/api";
-import { OtelTracer } from "../lib/otel-tracer";
+import { OtelTracer } from "otel-tracer";
 
 /**
  * Global tracer instance, so all function calls in this app can use this same object.

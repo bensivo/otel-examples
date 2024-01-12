@@ -1,0 +1,11 @@
+version: '3'
+
+
+tasks:
+  install:
+    cmds: 
+      - npm i
+
+  run:
+    cmds:
+      - npx ts-node receiver.ts
