@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:1.52
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+    environment:
+      - LOG_LEVEL=debug
