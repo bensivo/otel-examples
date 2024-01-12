@@ -1,6 +1,5 @@
 version: '3'
 
-
 includes:
   jaeger:
     taskfile: ./packages/jaeger/Taskfile.yml
@@ -32,3 +31,24 @@ includes:
   java-tracer-demo-basic:
     taskfile: ./packages/java-tracer-demo-basic/Taskfile.yml
     dir: ./packages/java-tracer-demo-basic/
+
+tasks:
+  nodejs-sender-receiver:
+    cmds:
+      # Start the 'dev' task for service and webapp, as background processes
+      - |
+        source ./scripts/functions.sh;
+        prefix-green "receiver" task nodejs-tracer-demo-receiver:run &
+        sleep 3  # Give the receiver time to start up
+        prefix-yellow "sender" task nodejs-tracer-demo-sender:run &
+        wait
+
+  python-sender-receiver:
+    cmds:
+      # Start the 'dev' task for service and webapp, as background processes
+      - |
+        source ./scripts/functions.sh;
+        prefix-green "receiver" task python-tracer-demo-receiver:run &
+        sleep 3  # Give the receiver time to start up
+        prefix-yellow "sender" task python-tracer-demo-sender:run &
+        wait

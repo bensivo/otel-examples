@@ -43,7 +43,8 @@ First install all the following dependencies:
 - docker
 - task (Taskfile.dev)
 
-Run through all tracing demos. We use Taskfile.dev for running commands, because of its simplicity:
+Run through all tracing demos. We use Taskfile.dev for organizing our monorepo because of its simplicity, and because it isn't tied to any specific programming language.
+
 ```bash
 task jaeger:start
 
