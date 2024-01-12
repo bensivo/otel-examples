@@ -1,9 +1,10 @@
 import sys
-sys.path.append('./')
+sys.path.append('../python-tracer')
+
 from flask import Flask, request
 import json
 import time
-from lib.tracing import OtelTracer
+from tracer import OtelTracer
 
 tracer = OtelTracer(service_name='python-tracing-demo-receiver', service_version='0.0.0')
 tracer.initialize()

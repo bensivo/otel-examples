@@ -1,0 +1,17 @@
+version: '3'
+
+
+includes:
+  jaeger:
+    taskfile: ./packages/jaeger/Taskfile.yml
+    dir: ./packages/jaeger/
+  python-tracer-demo-basic:
+    taskfile: ./packages/python-tracer-demo-basic/Taskfile.yml
+    dir: ./packages/python-tracer-demo-basic/
+  python-tracer-demo-sender:
+    taskfile: ./packages/python-tracer-demo-sender/Taskfile.yml
+    dir: ./packages/python-tracer-demo-sender/
+  python-tracer-demo-receiver:
+    taskfile: ./packages/python-tracer-demo-receiver/Taskfile.yml
+    dir: ./packages/python-tracer-demo-receiver/
+    

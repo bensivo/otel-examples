@@ -1,0 +1,16 @@
+version: '3'
+
+
+tasks:
+  install:
+    cmds: 
+      - |
+        python -m venv venv
+        source ./venv/bin/activate
+        pip install -r ./requirements.txt
+
+  run:
+    cmds:
+      - |
+        source ./venv/bin/activate
+        python sender.py
