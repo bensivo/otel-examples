@@ -15,4 +15,4 @@ include("app")
 
 // This allows us to import the project from the lib folder
 // See app/build.gradle.kts for the dependency declaration
-includeBuild("../../lib")
+includeBuild("../java-tracer")

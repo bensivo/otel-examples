@@ -26,3 +26,9 @@ includes:
   nodejs-tracer-demo-receiver:
     taskfile: ./packages/nodejs-tracer-demo-receiver/Taskfile.yml
     dir: ./packages/nodejs-tracer-demo-receiver/
+  java-tracer:
+    taskfile: ./packages/java-tracer/Taskfile.yml
+    dir: ./packages/java-tracer/
+  java-tracer-demo-basic:
+    taskfile: ./packages/java-tracer-demo-basic/Taskfile.yml
+    dir: ./packages/java-tracer-demo-basic/

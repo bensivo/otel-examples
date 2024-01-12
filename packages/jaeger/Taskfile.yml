@@ -3,4 +3,7 @@ version: '3'
 tasks:
   start:
     cmds:
-      - docker-compose up 
+      - docker-compose up  -d
+  stop:
+    cmds:
+      - docker-compose down
