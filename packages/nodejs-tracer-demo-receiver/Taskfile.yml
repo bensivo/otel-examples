@@ -1,11 +1,37 @@
 version: '3'
 
+includes:
+  nodejs-tracer:
+    taskfile: ../nodejs-tracer/Taskfile.yml
+    dir: ../nodejs-tracer/
+    internal: true
 
 tasks:
   install:
+    sources:
+      - package*.json
+      - node_modules/**/*
+    generates:
+      - node_modules/**/*
     cmds: 
       - npm i
 
-  run:
+  build:
+    sources:
+      - src/**/*
+      - package*.json
+      - node_modules/**/*
+      - tsconfig.json
+    generates:
+      - ./dist/**/*
+    deps:
+      - nodejs-tracer:build
+      - install
     cmds:
-      - npx ts-node receiver.ts
+      - npx tsc
+
+  run:
+    deps:
+      - build
+    cmds:
+      - node ./dist/receiver.js

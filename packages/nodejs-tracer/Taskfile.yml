@@ -3,11 +3,22 @@ version: '3'
 
 tasks:
   install:
+    sources:
+      - ./package*.json
+      - ./node_modules/**/*
     cmds: 
       - npm i
-
-  run:
+  
+  build:
+    sources:
+      - ./lib/**/*
+      - ./package*.json
+      - ./node_modules/**/*
+      - ./tsconfig.json
+    generates:
+      - ./dist/**/*
+    deps:
+      - install
     cmds:
-      - |
-        source ./venv/bin/activate
-        python basic.py
+      - test -d ./dist || rm -rf dist
+      - npx tsc
